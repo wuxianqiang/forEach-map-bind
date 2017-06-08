@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>回调函数深入优化，map和forEach实现</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        var ary = [1, 2, 3, 4];
+        var obj = {
+            a:1
+        };
+        // ary.forEach(function (item, index, arr) {
+        //     console.log(this);
+        // }.bind(obj));//但是其他方法有不支持第二个参数的，就可以使用这个形式进行修改
+        // ary.forEach(function (item, index, arr) {
+        //     console.log(this);
+        // },obj);//不管是forEach和map都支持第二个参数，第二个参数就是修改this的
+        //forEach\map在低版本浏览器不兼容的，bind在IE6~8是不兼容的
+
+
+    </script>
+</body>
+
+</html>

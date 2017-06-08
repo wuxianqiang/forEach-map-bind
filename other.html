@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>柯理化函数思想</title>
+</head>
+
+<body>
+    <p>就是JS预处理思想</p>
+    <script type="text/javascript">
+        // var obj = {
+        //     a: 1
+        // }
+        // function fn() {
+        //     // body
+        //     console.log(this);
+        // }
+
+        // window.setTimeout(fn.call(obj), 1000);//这样是不行的，call是找到方法，然后就立即执行
+        // window.setTimeout(fn.bind(obj), 1000);
+
+
+
+        // //两个参数表示，回调函数，this指向
+        // function bind(callBack, context) {
+        //     // bind实现，是预先处理，但是不是立即执行哦
+        //     var parameter = Array.prototype.slice.call(arguments, 2);//传递进来的参数进行转换为数组
+        //     //bind方法要有返回结果
+        //     return function () {
+        //         //函数除了参数外那还有事件对象
+        //         var par = Array.prototype.slice.call(arguments, 0);
+        //         // 返回一个函数，在给定时间执行
+        //         callBack.apply(context, parameter.concat(par));
+        //     }
+
+        // }
+        // window.setTimeout(bind(fn, obj, 100, 200), 100);//意思就是下面的
+        // // window.setTimeout(function () {callBack.call(context)},100);
+
+        Function.prototype.mybind = function mybind(context) {
+            var _this = this;
+            var outerArg = Array.prototype.slice.call(arguments, 1);
+            // 实现bind方法
+            if ("bind" in Function.prototype) {
+                //要传数组，又要用到apply，apply又会改变this
+                return this.bind.apply(this,[context].concat(outerArg));
+            }
+
+            return function () {
+                // 事件对象会自动作为参数,但是事件对象也要处理兼容
+
+                var innerArg = Array.prototype.slice.call(arguments, 0);
+                innerArg.length === 0 ? innerArg[innerArg.length] = window.event : null;
+                var arg = outerArg.concat(innerArg);
+                _this.apply(context, arg);
+            }
+        }
+
+        //使用方法如下：
+        function fn (num1,num2,e) {
+            // body
+            console.log(this,num1,num2,e);
+        }
+        var obj = {};
+        document.body.onclick = fn.mybind(obj,1,2);
+        //Object {}__proto__: Object 1 2 MouseEvent {isTrusted: true, screenX: 88, screenY: 112, clientX: 88, clientY: 22…}
+    </script>
+
+</body>
+
+</html>
